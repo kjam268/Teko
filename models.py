@@ -231,7 +231,7 @@ def Znet(input_size = (80, 576, 576, 2), feature_map=8, kernel_size=5, keep_rate
 	return model
 
 
-def tf_Unet(input_size = (576, 576, 2), kernel_size=3, lr=0.0001, loss_function="categorical_crossentropy"):
+def tf_Unet(input_size = (576, 576, 2), kernel_size=3, lr=0.0001, loss_function="categorical_crossentropy", log_dir="/tmp"):
 
 	block1a = input_data(input_size)#shape=[None,320,320,1])
 	block1a = conv_2d(block1a, 64, kernel_size, activation='relu')
@@ -282,13 +282,13 @@ def tf_Unet(input_size = (576, 576, 2), kernel_size=3, lr=0.0001, loss_function=
 
 	Clf     = conv_2d(block1b, 2, 1, 1, activation='softmax')
 	regress = regression(Clf, optimizer='adam', loss=dice_loss_2d, learning_rate=lr)
-	model   = DNN(regress, tensorboard_verbose=0)
+	model   = DNN(regress, tensorboard_dir=log_dir)
 
 	### First initial model saved 
 	#model.save("Weights/baseline_5x5/baseline_weights_5x5")
 
 	return model
-	
+
 
 def dice_loss_2d(y_pred, y_true):
 	

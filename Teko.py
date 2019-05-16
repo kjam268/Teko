@@ -31,10 +31,10 @@ def main():
 	comments = "Teko - Unet Model " 
 
 	# Variable set values
-	session = "27"
+	session = "28"
 	epoch = 300
-	nb_train = 80
-	nb_test = 20
+	nb_train = 5
+	nb_test = 5
 	if training_path == "../Data/InputData/_Training Set/":
 		nb_train = 100
 		nb_test = 54
@@ -100,7 +100,7 @@ def main():
 	# Building the model and loading the weights
 	#model = Znet((None, img_size[1], img_size[0], 1), feature_map, kernel_size, keep_rate, lr, log_dir)
 	#model = Inception((None, img_size[1], img_size[0], 1), feature_map, kernel_size, keep_rate, lr, log_dir)
-	model = tf_Unet((None, img_size[1], img_size[0], 1))
+	model = tf_Unet((None, img_size[1], img_size[0], 1),log_dir=log_dir)
 
 	if weights:
 		model.load(weights)

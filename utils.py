@@ -7,7 +7,7 @@ from scipy import ndimage
 from PIL import Image
 from tqdm import tqdm
 import matplotlib.pyplot as plt
-
+from scipy.ndimage import morphology
 
 def atoi(text):
 	return int(text) if text.isdigit() else text
@@ -327,15 +327,15 @@ def metrics(savedir):
 
 	for index, value in enumerate(folder):
 
-		prediction = np.load(value+"/Prediction.npy")
+		prediction = np.load(value+"/prediction.npy")
 		ground_truth = np.load(value+"/test_label.npy")
 
 		surface_distance = surfd(prediction, ground_truth, [0.625, 0.625, 0.625], 1)
 
-		msd[number] = surface_distance.mean()
-		hd[number] = surface_distance.max()
+		msd[index] = surface_distance.mean()
+		hd[index] = surface_distance.max()
 
-		diam_error[number], Vol_error[number] = diam_vol_err(prediction, ground_truth)
+		diam_error[index], Vol_error[index] = diam_vol_err(prediction, ground_truth)
 
 	return np.mean(msd), np.mean(hd), np.mean(diam_error), np.mean(Vol_error)
 
@@ -397,10 +397,10 @@ def diam_vol_error(prediction, ground_truth):
 def diam_vol_err(prediction, ground_truth):
 
 	diam_pred = np.max(np.sum(prediction, axis=2))
-	diam_GT = np.max(np.sum(groundT, axis=2))
+	diam_GT = np.max(np.sum(ground_truth, axis=2))
 
 	diam_error = np.abs(diam_pred-diam_GT)/diam_GT
-	Vol_error = np.abs(np.sum(prediction==1)-np.sum(groundT==1))/np.sum(groundT==1)
+	Vol_error = np.abs(np.sum(prediction==1)-np.sum(ground_truth==1))/np.sum(ground_truth==1)
 
 	return diam_error, Vol_error
 
